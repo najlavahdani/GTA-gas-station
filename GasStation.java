@@ -1,5 +1,6 @@
 import java.time.LocalTime;
 import java.util.Scanner;
+import java.io.*;
 public class GasStation {
     //fields
     public static Scanner input = new Scanner(System.in);
@@ -7,10 +8,9 @@ public class GasStation {
     public static Pump regPump = new RegularPump();
     public static Pump supPump = new SupremePump();
     public static Pump Euro4Pump = new Euro4Pump();
-    private static int gasStationWallet = 0; 
-    private static int regProvidedFuels = 0; //kol fuel regular ke gas station erae dade
-    private static int supProvidedFuels = 0;
-    private static int Euro4ProvidedFuels = 0;
+    private static int gasStationWallet = 0;  //kol daramad 
+    private static int providedFuels = 0; //kol fuel erae dade shode
+    
 
 
     public static int calcRemaningFuel(FuelType type){
@@ -26,20 +26,27 @@ public class GasStation {
         }
     }
 
-    public static void addToProvidedFuel(int liters, FuelType type){
-        switch (type) {
-            case FuelType.REGULAR:
-                GasStation.regProvidedFuels = GasStation.regProvidedFuels + liters;
-                break;
+    public static void addToProvidedFuel(int liters){
+        GasStation.providedFuels = providedFuels + liters;
+        saveToFile();
+    }
 
-            case FuelType.SUPREME:
-                GasStation.supProvidedFuels = GasStation.supProvidedFuels + liters;
-                break;
-            
-            case FuelType.EURO4:
-                GasStation.Euro4ProvidedFuels = GasStation.Euro4ProvidedFuels + liters;
-                break;
-        }
+    public static void saveToFile(){
+        //mizan sookht bargiri shode va daramad hasel az an ra dar yek file zakhire mikonad
+        try {
+            FileWriter fileWriter = new FileWriter("./Accounting.txt");
+            BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
+
+            bufferWriter.write("The total amount of fuel provided so far is " + GasStation.providedFuels + " Liters, and the total income is " + GasStation.gasStationWallet + " Tomans");
+
+            bufferWriter.flush();
+            bufferWriter.close();
+            fileWriter.flush();
+            fileWriter.close();
+
+        } catch (Exception e) {
+            System.out.println("ey vay badbakht shodim ke:(");
+        } 
     }
 
     public static void addToWallet(int money){
@@ -102,6 +109,7 @@ public class GasStation {
 
                     for(int i=0; i<GasStation.carsQueue.length; i++){
                         Car currentCar = GasStation.carsQueue[i];
+                        System.out.println("car number: " + (i+1));
                         System.out.println("--car with fuel leve " + currentCar.getCarFuelTank() + " is about to start refueling at " + LocalTime.now() + "time!");
                         FuelType cfType = currentCar.getCarFuelType(); //type fuel ke mashin kikhad ke bayad ba type pump match bashe
                         Pump currectPump;
@@ -122,8 +130,9 @@ public class GasStation {
                                 Thread.sleep((liters / 50)*2000);
                                 // gs.sleep(liters); //tavaghof barname baraye benzin zadan
                                 System.out.println("-- this car's fuel level after refueling is " + currentCar.getCarFuelTank() + " at " + LocalTime.now());
-                                GasStation.addToProvidedFuel(liters , currectPump.getPumpType()); //meghdar liter dade shode tooye pump benzin ezafe mishe
+                                GasStation.addToProvidedFuel(liters); //meghdar liter dade shode tooye pump benzin ezafe mishe
                                 isRefueling = true;
+                                System.out.println("-- This car left the gas station");
                                 
 
                             }catch(NotEnoughMoneyException neme) {
@@ -153,8 +162,9 @@ public class GasStation {
                                 Thread.sleep((liters / 50)*2000);
                                 // gs.sleep(liters); //tavaghof barname baraye benzin zadan
                                 System.out.println("-- this car's fuel level after refueling is " + currentCar.getCarFuelTank() + " at " + LocalTime.now());
-                                GasStation.addToProvidedFuel(liters , currectPump.getPumpType()); //meghdar liter dade shode tooye pump benzin ezafe mishe
+                                GasStation.addToProvidedFuel(liters); //meghdar liter dade shode tooye pump benzin ezafe mishe
                                 isRefueling = true;
+                                System.out.println("-- This car left the gas station");
                                 
 
                             }catch(NotEnoughMoneyException neme) {
@@ -184,8 +194,9 @@ public class GasStation {
                                 Thread.sleep((liters/50)*2000);
                                 // gs.sleep(liters); //tavaghof barname baraye benzin zadan
                                 System.out.println("-- this car's fuel level after refueling is " + currentCar.getCarFuelTank() + " at " + LocalTime.now());
-                                GasStation.addToProvidedFuel(liters , currectPump.getPumpType()); //meghdar liter dade shode tooye pump benzin ezafe mishe
+                                GasStation.addToProvidedFuel(liters); //meghdar liter dade shode tooye pump benzin ezafe mishe
                                 isRefueling = true;
+                                System.out.println("-- This car left the gas station");
 
                             }catch(NotEnoughMoneyException neme) {
                                 System.out.println("-- this car doesn't have enough money!");
@@ -203,14 +214,27 @@ public class GasStation {
                         
                     }
 
+                    
 
+                    break;
 
                 case 2: //report mide
-                    System.out.println("Sold Regular Fuel: " + GasStation.regProvidedFuels + "\nRemaining Regular Fuel: " + GasStation.calcRemaningFuel(FuelType.REGULAR) + "\n");
-                    System.out.println("Sold Supreme Fuel: " + GasStation.supProvidedFuels + "\nRemaining Supreme Fuel: " + GasStation.calcRemaningFuel(FuelType.SUPREME) + "\n");
-                    System.out.println("Sold Euro4 Fuel: " + GasStation.Euro4ProvidedFuels + "\nRemaining Euro4 Fuel: " + GasStation.calcRemaningFuel(FuelType.EURO4) + "\n");
+                    BufferedReader bufferedReader;
+                    FileReader fileReader;
+                    //file accounting marboot be hesabdari ro mikhoone o to console print mikone
+                    try {
+                        fileReader = new FileReader("./Accounting.txt");
+                        bufferedReader = new BufferedReader(fileReader);
+                        String line;
+                        while(( line = bufferedReader.readLine()) != null){
+                            System.out.println(line);
+                        } 
+                        bufferedReader.close();
+                        fileReader.close();                        
+                    } catch (Exception e) {
+                        System.out.println("ey vay badbakht shodim ke:(");
+                    }
 
-                    System.out.println("Total Income: " + GasStation.gasStationWallet + "\n");
                 case 3:
                 default:
                     break;
