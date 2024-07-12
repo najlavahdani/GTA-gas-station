@@ -154,7 +154,7 @@ public class GasStation {
                                 liters = currentCar.carFuelWanted(currectPump.getppl()); //meghdar fuel ghabe gereftan tavasote mashin hesab mishe
                                 liters = currectPump.refuelingPump(liters); //meghdar fuel ghabele eraee tavasote pump hesab mishe va az pump kam mishe
                                 currentCar.addToCarFuelTank(liters); //fuel be bak mashin ezafe mishe
-                                int price = currentCar.withdrawFromTheWallet(liters, GasStation.regPump.getppl()); //pool benzin az Wallet mashin kam mishe
+                                int price = currentCar.withdrawFromTheWallet(liters, GasStation.regPump.getppl()); //pool benzin az Wallet mashin kam mishe va pooli ke kam shode ro barmogardoone
                                 GasStation.addToWallet(price); //pool be wallet gas station ezaf mishe
                                 Thread.sleep((liters / 50)*2000); //tavaghof barname baraye benzin zadan
                                 
@@ -192,7 +192,7 @@ public class GasStation {
                             }
                         }
 
-                        if(cfType == GasStation.supPump.getPumpType()){
+                        if(cfType == GasStation.supPump.getPumpType()){ //age type supreme bashe
                             try {
                                 log = "-- car with fuel level " + currentCar.getCarFuelTank() + " is starting to refueling at " + LocalTime.now() + " time!";
                                 System.out.println(log);
@@ -203,7 +203,7 @@ public class GasStation {
                                 liters = currentCar.carFuelWanted(currectPump.getppl()); //meghdar fuel ghabe gereftan tavasote mashin hesab mishe
                                 liters = currectPump.refuelingPump(liters); //meghdar fuel ghabele eraee tavasote pump hesab mishe va az pump kam mishe
                                 currentCar.addToCarFuelTank(liters); //fuel be bak mashin ezafe mishe
-                                int price = currentCar.withdrawFromTheWallet(liters, GasStation.regPump.getppl()); //pool benzin az Wallet mashin kam mishe
+                                int price = currentCar.withdrawFromTheWallet(liters, GasStation.supPump.getppl()); //pool benzin az Wallet mashin kam mishe
                                 GasStation.addToWallet(price); //pool be wallet gas station ezaf mishe
                                 Thread.sleep((liters / 50)*2000);
                                 // gs.sleep(liters); //tavaghof barname baraye benzin zadan
@@ -230,7 +230,7 @@ public class GasStation {
                                 GasStation.addToLogsFile(log); //in log ro tooye file save mikone
                                 isRefueling = true;
                             }
-                        }else if(cfType != GasStation.supPump.getPumpType()){
+                        }else if(cfType != GasStation.supPump.getPumpType()){ //type supreme baraye mashin match nist
                             if(isRefueling == false){
                                 log = "-- this station is not compatible to this car at " + LocalTime.now()+ " time!";
                                 System.out.println(log);
@@ -238,7 +238,7 @@ public class GasStation {
                             }
                         }
 
-                        if(cfType == GasStation.Euro4Pump.getPumpType()){
+                        if(cfType == GasStation.Euro4Pump.getPumpType()){ //typesh Euro4 bashe
                             try {
                                 log = "-- car with fuel level " + currentCar.getCarFuelTank() + " is starting to refueling at " + LocalTime.now() + " time!";
                                 System.out.println(log);
@@ -249,7 +249,7 @@ public class GasStation {
                                 liters = currentCar.carFuelWanted(currectPump.getppl()); //meghdar fuel ghabe gereftan tavasote mashin hesab mishe
                                 liters = currectPump.refuelingPump(liters); //meghdar fuel ghabele eraee tavasote pump hesab mishe va az pump kam mishe
                                 currentCar.addToCarFuelTank(liters); //fuel be bak mashin ezafe mishe
-                                int price = currentCar.withdrawFromTheWallet(liters, GasStation.regPump.getppl()); //pool benzin az Wallet mashin kam mishe
+                                int price = currentCar.withdrawFromTheWallet(liters, GasStation.Euro4Pump.getppl()); //pool benzin az Wallet mashin kam mishe
                                 GasStation.addToWallet(price); //pool be wallet gas station ezaf mishe
                                 Thread.sleep((liters/50)*2000);
                                 // gs.sleep(liters); //tavaghof barname baraye benzin zadan
@@ -275,7 +275,7 @@ public class GasStation {
                                 GasStation.addToLogsFile(log); //in log ro tooye file save mikone
                                 isRefueling = true;
                             }
-                        }else if(cfType != GasStation.Euro4Pump.getPumpType()){
+                        }else if(cfType != GasStation.Euro4Pump.getPumpType()){ //type euro4 barash match nabashe
                             if(isRefueling == false){
                                 log = "-- this station is not compatible to this car at " + LocalTime.now()+ " time!";
                                 System.out.println(log);
